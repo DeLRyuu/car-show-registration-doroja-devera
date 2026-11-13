@@ -1,4 +1,4 @@
-// Shows money like the PDF says: ₱2,500.00
+
 export function formatCurrency(value: number): string {
   return new Intl.NumberFormat("en-PH", {
     style: "currency",
@@ -6,7 +6,7 @@ export function formatCurrency(value: number): string {
   }).format(value);
 }
 
-// Shows dates like the PDF says: Feb 10, 2027 08:30 AM
+
 export function formatDate(iso: string): string {
   const date = new Date(iso);
 
