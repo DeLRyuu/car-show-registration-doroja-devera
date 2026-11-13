@@ -79,8 +79,7 @@ const registrations: Registration[] = rows.map(
   }),
 );
 
-// Waits a little, like a real API call.
-// This lets you see the loading message.
+
 function wait(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
