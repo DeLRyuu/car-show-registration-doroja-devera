@@ -1,29 +1,31 @@
 import { useEffect, useMemo, useState } from "react";
 import KpiCards from "../components/KpiCards";
+import Pagination from "../components/Pagination";
 import RegistrationFilters from "../components/RegistrationFilters";
 import RegistrationTable from "../components/RegistrationTable";
 import useDebounce from "../hooks/useDebounce";
 import { getRegistrations, getSummary } from "../api/sampleData";
 import type { Registration, Summary } from "../types/registration";
 
-const PAGE_SIZE = 10;
-
 export default function RegistrationsPage() {
   // KPI cards
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loadingSummary, setLoadingSummary] = useState(true);
 
-  // Filters
+  // Filters and page
   const [search, setSearch] = useState("");
   const [type, setType] = useState("");
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   // Waits 400 ms after the user stops typing
   const debouncedSearch = useDebounce(search, 400);
 
   // Table
   const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [loadingTable, setLoadingTable] = useState(true);
 
   const filters = useMemo(
@@ -32,9 +34,9 @@ export default function RegistrationsPage() {
       type,
       status,
       page,
-      pageSize: PAGE_SIZE,
+      pageSize,
     }),
-    [debouncedSearch, type, status, page],
+    [debouncedSearch, type, status, page, pageSize],
   );
 
   useEffect(() => {
@@ -59,7 +61,10 @@ export default function RegistrationsPage() {
 
     getRegistrations(filters)
       .then((data) => {
-        if (!ignore) setRegistrations(data.items);
+        if (ignore) return;
+        setRegistrations(data.items);
+        setTotalCount(data.totalCount);
+        setTotalPages(data.totalPages);
       })
       .finally(() => {
         if (!ignore) setLoadingTable(false);
@@ -83,6 +88,11 @@ export default function RegistrationsPage() {
 
   function handleStatusChange(value: string) {
     setStatus(value);
+    setPage(1);
+  }
+
+  function handlePageSizeChange(size: number) {
+    setPageSize(size);
     setPage(1);
   }
 
@@ -137,6 +147,18 @@ export default function RegistrationsPage() {
           </div>
         ) : (
           <RegistrationTable registrations={registrations} />
+        )}
+
+        {totalCount > 0 && (
+          <Pagination
+            page={page}
+            pageSize={pageSize}
+            totalCount={totalCount}
+            totalPages={totalPages}
+            loading={loadingTable}
+            onPageChange={setPage}
+            onPageSizeChange={handlePageSizeChange}
+          />
         )}
       </section>
     </div>
