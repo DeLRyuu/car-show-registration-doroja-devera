@@ -88,7 +88,7 @@ export async function getRegistrations(
   filters: RegistrationFilters,
 ): Promise<RegistrationsResponse> {
   await wait(400);
-
+   //throw new Error("Test error");
   let list = registrations;
 
   const name = filters.participantName.trim().toLowerCase();

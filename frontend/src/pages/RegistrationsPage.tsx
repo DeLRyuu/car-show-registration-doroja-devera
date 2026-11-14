@@ -28,6 +28,10 @@ export default function RegistrationsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loadingTable, setLoadingTable] = useState(true);
 
+  // Error and "Try again"
+  const [error, setError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
+
   const filters = useMemo(
     () => ({
       participantName: debouncedSearch,
@@ -41,10 +45,14 @@ export default function RegistrationsPage() {
 
   useEffect(() => {
     let ignore = false;
+    setLoadingSummary(true);
 
     getSummary()
       .then((data) => {
         if (!ignore) setSummary(data);
+      })
+      .catch(() => {
+        if (!ignore) setError(true);
       })
       .finally(() => {
         if (!ignore) setLoadingSummary(false);
@@ -53,11 +61,12 @@ export default function RegistrationsPage() {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   useEffect(() => {
     let ignore = false;
     setLoadingTable(true);
+    setError(false);
 
     getRegistrations(filters)
       .then((data) => {
@@ -66,6 +75,9 @@ export default function RegistrationsPage() {
         setTotalCount(data.totalCount);
         setTotalPages(data.totalPages);
       })
+      .catch(() => {
+        if (!ignore) setError(true);
+      })
       .finally(() => {
         if (!ignore) setLoadingTable(false);
       });
@@ -73,7 +85,7 @@ export default function RegistrationsPage() {
     return () => {
       ignore = true;
     };
-  }, [filters]);
+  }, [filters, reloadKey]);
 
   // Changing any filter goes back to page 1
   function handleSearchChange(value: string) {
@@ -101,6 +113,10 @@ export default function RegistrationsPage() {
     setType("");
     setStatus("");
     setPage(1);
+  }
+
+  function handleRetry() {
+    setReloadKey((key) => key + 1);
   }
 
   return (
@@ -132,6 +148,19 @@ export default function RegistrationsPage() {
           <p className="px-4 py-8 text-center text-slate-600">
             Loading registrations…
           </p>
+        ) : error ? (
+          <div role="alert" className="px-4 py-8 text-center">
+            <p className="font-medium text-red-700">
+              Cannot reach the API. Please check that the backend is running.
+            </p>
+            <button
+              type="button"
+              onClick={handleRetry}
+              className="mt-3 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            >
+              Try again
+            </button>
+          </div>
         ) : registrations.length === 0 ? (
           <div className="px-4 py-8 text-center">
             <p className="text-slate-700">
@@ -149,7 +178,7 @@ export default function RegistrationsPage() {
           <RegistrationTable registrations={registrations} />
         )}
 
-        {totalCount > 0 && (
+        {totalCount > 0 && !error && (
           <Pagination
             page={page}
             pageSize={pageSize}
