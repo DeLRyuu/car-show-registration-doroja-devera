@@ -6,6 +6,7 @@ import RegistrationTable from "../components/RegistrationTable";
 import useDebounce from "../hooks/useDebounce";
 import { getRegistrations, getSummary } from "../api/sampleData";
 import type { Registration, Summary } from "../types/registration";
+import TableSkeleton from "../components/TableSkeleton";
 
 export default function RegistrationsPage() {
   // KPI cards
@@ -144,10 +145,8 @@ export default function RegistrationsPage() {
           />
         </div>
 
-        {loadingTable ? (
-          <p className="px-4 py-8 text-center text-slate-600">
-            Loading registrations…
-          </p>
+                {loadingTable ? (
+          <TableSkeleton />
         ) : error ? (
           <div role="alert" className="px-4 py-8 text-center">
             <p className="font-medium text-red-700">
