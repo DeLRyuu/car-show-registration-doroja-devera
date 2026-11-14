@@ -1,12 +1,3 @@
-
-#What is in it, in simple words
-
-How to run the app, with npm install and npm run dev
-The features and the folder structure
-How to switch between sample data and the real API (the PDF asks for this)
-The 2 API requests the dashboard uses
-
-
 # Car Show Registration System – Frontend
 
 React dashboard for the Car Show 2027 registration system.
