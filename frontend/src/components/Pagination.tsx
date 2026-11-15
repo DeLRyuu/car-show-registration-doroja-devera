@@ -1,4 +1,4 @@
-interface PaginationProps {
+﻿interface PaginationProps {
   page: number;
   pageSize: number;
   totalCount: number;
@@ -33,27 +33,27 @@ export default function Pagination({
   const from = totalCount === 0 ? 0 : (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, totalCount);
 
-  const buttonBase =
-    "min-w-9 rounded-md border px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-200";
-  const normal = "border-slate-300 bg-white text-slate-700 hover:bg-slate-50";
-  const active = "border-blue-700 bg-blue-700 text-white";
-  const disabled = "cursor-not-allowed opacity-50";
+  const button =
+    "h-10 min-w-10 rounded-md border px-3 text-base font-medium disabled:cursor-not-allowed disabled:opacity-50";
+  const normal = "border-line bg-white text-ink enabled:hover:bg-tint";
+  const active = "border-steel bg-steel text-white";
 
   const atFirst = page <= 1;
   const atLast = page >= totalPages;
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 px-4 py-3">
-      <div className="flex items-center gap-1">
+    <nav
+      aria-label="Pagination"
+      className="flex flex-wrap items-center justify-between gap-4 border-t border-line px-4 py-4"
+    >
+      <div className="flex flex-wrap items-center gap-1.5">
         <button
           type="button"
           disabled={loading || atFirst}
           onClick={() => onPageChange(page - 1)}
-          className={`${buttonBase} ${normal} ${
-            loading || atFirst ? disabled : ""
-          }`}
+          className={`${button} ${normal}`}
         >
-          ‹ Prev
+          Previous
         </button>
 
         {getPageNumbers(page, totalPages).map((n) => (
@@ -63,9 +63,7 @@ export default function Pagination({
             disabled={loading}
             aria-current={n === page ? "page" : undefined}
             onClick={() => onPageChange(n)}
-            className={`${buttonBase} ${n === page ? active : normal} ${
-              loading ? disabled : ""
-            }`}
+            className={`${button} ${n === page ? active : normal}`}
           >
             {n}
           </button>
@@ -75,20 +73,18 @@ export default function Pagination({
           type="button"
           disabled={loading || atLast}
           onClick={() => onPageChange(page + 1)}
-          className={`${buttonBase} ${normal} ${
-            loading || atLast ? disabled : ""
-          }`}
+          className={`${button} ${normal}`}
         >
-          Next ›
+          Next
         </button>
       </div>
 
-      <p className="text-sm text-slate-600">
-        Showing {from}–{to} of {totalCount}
+      <p className="text-base text-muted">
+        Showing {from}&ndash;{to} of {totalCount}
       </p>
 
       <div className="flex items-center gap-2">
-        <label htmlFor="pageSize" className="text-sm text-slate-600">
+        <label htmlFor="pageSize" className="text-base text-muted">
           Per page
         </label>
         <select
@@ -96,7 +92,7 @@ export default function Pagination({
           value={pageSize}
           disabled={loading}
           onChange={(e) => onPageSizeChange(Number(e.target.value))}
-          className="rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm text-slate-900 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="h-10 rounded-md border border-line bg-white px-2 text-base"
         >
           {PAGE_SIZES.map((size) => (
             <option key={size} value={size}>
@@ -105,6 +101,6 @@ export default function Pagination({
           ))}
         </select>
       </div>
-    </div>
+    </nav>
   );
 }

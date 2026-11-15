@@ -1,28 +1,31 @@
-const widths = ["w-20", "w-32", "w-32", "w-28", "w-16", "w-20", "w-16", "w-16"];
+﻿const widths = ["w-20", "w-32", "w-32", "w-28", "w-16", "w-20", "w-16", "w-16"];
 
 const headers = [
-  "Reg. No.",
+  "Reg. no.",
   "Date",
   "Participant",
   "Car",
   "Type",
   "Status",
-  "Fee / Paid",
+  "Fee / paid",
   "Payment",
 ];
 
 export default function TableSkeleton({ rows = 8 }: { rows?: number }) {
   return (
     <div role="status" aria-live="polite" className="overflow-x-auto">
-      <span className="sr-only">Loading registrations…</span>
+      <span className="sr-only">Loading registrations&hellip;</span>
 
-      <table className="min-w-full text-left text-sm">
-        <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-600">
+      <table className="min-w-full text-left">
+        <thead className="border-b border-line bg-paper/60">
           <tr>
             {headers.map((h, i) => (
               <th
                 key={h}
-                className={`px-4 py-3 ${i === 6 ? "text-right" : ""}`}
+                scope="col"
+                className={`px-4 py-3 text-sm font-medium text-muted ${
+                  i === 6 ? "text-right" : ""
+                }`}
               >
                 {h}
               </th>
@@ -30,13 +33,13 @@ export default function TableSkeleton({ rows = 8 }: { rows?: number }) {
           </tr>
         </thead>
 
-        <tbody className="divide-y divide-slate-100">
+        <tbody className="divide-y divide-line">
           {Array.from({ length: rows }).map((_, row) => (
             <tr key={row}>
               {widths.map((width, col) => (
-                <td key={col} className="px-4 py-4">
+                <td key={col} className="px-4 py-5">
                   <div
-                    className={`h-4 animate-pulse rounded bg-slate-200 ${width} ${
+                    className={`h-4 animate-pulse rounded bg-line ${width} ${
                       col === 6 ? "ml-auto" : ""
                     }`}
                   />

@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import KpiCards from "../components/KpiCards";
 import Pagination from "../components/Pagination";
 import RegistrationFilters from "../components/RegistrationFilters";
 import RegistrationTable from "../components/RegistrationTable";
+import TableSkeleton from "../components/TableSkeleton";
 import useDebounce from "../hooks/useDebounce";
 import { getRegistrations, getSummary } from "../api/sampleData";
 import type { Registration, Summary } from "../types/registration";
-import TableSkeleton from "../components/TableSkeleton";
 
 export default function RegistrationsPage() {
   // KPI cards
@@ -120,20 +120,18 @@ export default function RegistrationsPage() {
     setReloadKey((key) => key + 1);
   }
 
-  return (
-    <div className="mx-auto max-w-6xl space-y-6 p-6">
-      <header>
-        <h1 className="text-2xl font-bold text-blue-700">Car Show 2027</h1>
-        <p className="text-sm text-slate-600">Registration Dashboard</p>
-      </header>
+  const primaryButton =
+    "mt-4 h-11 rounded-md bg-steel px-5 text-base font-medium text-white hover:bg-steel-dark";
 
+  return (
+    <main className="mx-auto max-w-6xl space-y-6 px-6 py-8">
       <KpiCards summary={summary} loading={loadingSummary} />
 
-      <section className="rounded-lg border border-slate-200 bg-white shadow-sm">
-        <div className="space-y-4 border-b border-slate-200 p-4">
-          <h2 className="text-lg font-semibold text-slate-900">
-            Registrations
-          </h2>
+      <section className="rounded-lg border border-line bg-white">
+        <div className="space-y-4 border-b border-line p-5">
+          <div>
+            <h2 className="text-xl font-semibold">Registrations</h2>
+          </div>
           <RegistrationFilters
             search={search}
             type={type}
@@ -145,30 +143,36 @@ export default function RegistrationsPage() {
           />
         </div>
 
-                {loadingTable ? (
+        {loadingTable ? (
           <TableSkeleton />
         ) : error ? (
-          <div role="alert" className="px-4 py-8 text-center">
-            <p className="font-medium text-red-700">
-              Cannot reach the API. Please check that the backend is running.
+          <div role="alert" className="px-6 py-12 text-center">
+            <p className="text-lg font-medium text-red-800">
+              Cannot reach the API.
+            </p>
+            <p className="mt-1 text-base text-muted">
+              Check that the backend is running, then try again.
             </p>
             <button
               type="button"
               onClick={handleRetry}
-              className="mt-3 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className={primaryButton}
             >
               Try again
             </button>
           </div>
         ) : registrations.length === 0 ? (
-          <div className="px-4 py-8 text-center">
-            <p className="text-slate-700">
+          <div className="px-6 py-12 text-center">
+            <p className="text-lg font-medium">
               No registrations match your filters.
+            </p>
+            <p className="mt-1 text-base text-muted">
+              Try a different name, or clear the filters to see everyone.
             </p>
             <button
               type="button"
               onClick={handleClear}
-              className="mt-3 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className={primaryButton}
             >
               Clear filters
             </button>
@@ -189,6 +193,7 @@ export default function RegistrationsPage() {
           />
         )}
       </section>
-    </div>
+    </main>
   );
 }
+
