@@ -1,5 +1,12 @@
+using System.Text.Json.Serialization;
+using Api.Features.Registrations;
 using Application.Abstractions.Data;
 using Application.Abstractions.Messaging;
+using Application.Features.Registrations;
+using Application.Features.Registrations.CreateRegistration;
+using Application.Features.Registrations.GetRegistrationById;
+using Application.Features.Registrations.GetRegistrations;
+using Application.Features.Registrations.GetRegistrationSummary;
 using Domain.Common;
 using FluentValidation;
 using Infrastructure.Persistence;
@@ -8,7 +15,7 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Database
+// Database (SQLite file inside the Api folder)
 var dbPath = Path.Combine(builder.Environment.ContentRootPath, "carshow.db");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 builder.Services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
@@ -17,8 +24,18 @@ builder.Services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbConte
 builder.Services.AddValidatorsFromAssembly(typeof(IAppDbContext).Assembly);
 
 // Handlers
-// builder.Services.AddScoped<ICommandHandler<TCommand, Result<TResponse>>, TCommandHandler>();
-// builder.Services.AddScoped<IQueryHandler<TQuery, Result<TResponse>>, TQueryHandler>();
+builder.Services.AddScoped<ICommandHandler<CreateRegistrationCommand, Result<RegistrationResponse>>, CreateRegistrationHandler>();
+builder.Services.AddScoped<IQueryHandler<GetRegistrationsQuery, Result<PagedResponse<RegistrationResponse>>>, GetRegistrationsHandler>();
+builder.Services.AddScoped<IQueryHandler<GetRegistrationByIdQuery, Result<RegistrationResponse>>, GetRegistrationByIdHandler>();
+builder.Services.AddScoped<IQueryHandler<GetRegistrationSummaryQuery, Result<RegistrationSummaryResponse>>, GetRegistrationSummaryHandler>();
+
+// JSON: enums as strings
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+// CORS: React dev server
+builder.Services.AddCors(options => options.AddPolicy("react", policy =>
+    policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod()));
 
 // API
 builder.Services.AddEndpointsApiExplorer();
@@ -26,35 +43,32 @@ builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, _, _) =>
     {
-        document.Info.Title = "Vertical Slice API Template by Elvin Manuel R. Luces, MIT";
-        document.Info.Description = "A simple API demonstrating Vertical Slice Architecture";
+        document.Info.Title = "Car Show Registration API";
+        document.Info.Description = "Vertical Slice API for Car Show 2027 registrations";
         return Task.CompletedTask;
     });
 });
 
 var app = builder.Build();
 
-// Seed data
+// Apply migrations, then seed (seeds only when the table is empty)
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    // dbContext.<Entities>.AddRange(...);
-
-    dbContext.SaveChanges();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+    await RegistrationSeeder.SeedAsync(db);
 }
 
-// Configure the HTTP request pipeline
+app.UseCors("react");
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
 
-// Root endpoint
-app.MapGet("/", () => "Welcome to the Vertical Slice API! Go to /scalar/v1 for API documentation.");
+app.MapGet("/", () => "Car Show Registration API. Go to /scalar/v1 for API documentation.");
 
-// Map endpoints
-// app.Map{FeatureGroup}Endpoints();
+app.MapRegistrationEndpoints();
 
 app.Run();
