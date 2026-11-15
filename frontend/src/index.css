@@ -1,1 +1,38 @@
+@import "@fontsource/barlow/400.css";
+@import "@fontsource/barlow/500.css";
+@import "@fontsource/barlow/600.css";
+@import "@fontsource/barlow/700.css";
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #16212b;
+  --color-muted: #55606c;
+  --color-steel: #2b5c8f;
+  --color-steel-dark: #234a72;
+  --color-tint: #e6edf4;
+  --color-paper: #f1f3f5;
+  --color-line: #d5dae0;
+}
+
+
+html {
+  font-size: 17px;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+
+:focus-visible {
+  outline: 3px solid var(--color-steel);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse {
+    animation: none;
+  }
+}

@@ -1,30 +1,31 @@
 interface KpiCardProps {
   label: string;
+  hint: string;
   value: string;
-  icon: string;
   loading?: boolean;
+  className?: string;
 }
 
 export default function KpiCard({
   label,
+  hint,
   value,
-  icon,
   loading = false,
+  className = "",
 }: KpiCardProps) {
   return (
-    <div className="min-w-[200px] flex-1 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="flex items-center justify-between text-sm font-medium text-slate-600">
-        <span>{label}</span>
-        <span aria-hidden="true" className="text-xl">
-          {icon}
-        </span>
-      </div>
+    <div className={`bg-white px-5 py-4 ${className}`}>
+      <p className="text-base font-medium">{label}</p>
 
       {loading ? (
-        <div className="mt-3 h-8 w-24 animate-pulse rounded bg-slate-200" />
+        <div className="my-2 h-8 w-24 animate-pulse rounded bg-line" />
       ) : (
-        <p className="mt-2 text-3xl font-bold text-slate-900">{value}</p>
+        <p className="my-1 whitespace-nowrap text-3xl font-semibold tabular-nums">
+          {value}
+        </p>
       )}
+
+      <p className="text-sm text-muted">{hint}</p>
     </div>
   );
 }
