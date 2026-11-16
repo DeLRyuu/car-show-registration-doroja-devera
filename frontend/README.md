@@ -106,4 +106,3 @@ If the page shows "Cannot reach the API", check that the backend is running, tha
 | `GET /api/registrations?participantName=&type=&status=&page=1&pageSize=10` | The table, filters and page buttons |
 | `GET /api/registrations/summary` | The KPI cards |
 
-The KPI cards use the summary endpoint. They are not added up from the rows on the page.
