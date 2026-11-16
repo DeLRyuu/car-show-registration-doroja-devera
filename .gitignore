@@ -1,3 +1,13 @@
 *.db
 *.db-shm
 *.db-wal
+
+bin/
+obj/
+.vs/
+node_modules/
+dist/
+
+
+#personal
+submission-requirements/
