@@ -1,0 +1,17 @@
+# SQLite Database Files
+*.db
+*.db-shm
+*.db-wal
+
+# Build outputs and IDE files (Task Requirement 3A.7)
+bin/
+obj/
+.vs/
+node_modules/
+dist/
+
+# Personal / Local submission working files
+submission-requirements/
+submission_requirements/
+
+backend/
