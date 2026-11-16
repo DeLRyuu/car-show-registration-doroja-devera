@@ -5,7 +5,7 @@ import RegistrationFilters from "../components/RegistrationFilters";
 import RegistrationTable from "../components/RegistrationTable";
 import TableSkeleton from "../components/TableSkeleton";
 import useDebounce from "../hooks/useDebounce";
-import { getRegistrations, getSummary } from "../api/sampleData";
+import { getRegistrations, getSummary } from "../api/registrationsApi";
 import type { Registration, Summary } from "../types/registration";
 
 export default function RegistrationsPage() {
@@ -196,4 +196,5 @@ export default function RegistrationsPage() {
     </main>
   );
 }
+
 
