@@ -486,3 +486,6 @@ dist/
 .vs/
 *.db-shm
 *.db-wal
+
+test-results/
+tests/

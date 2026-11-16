@@ -23,6 +23,7 @@ public class RegistrationConfiguration : IEntityTypeConfiguration<Registration>
         b.Property(x => x.Status).HasConversion<string>().HasMaxLength(20);
         b.Property(x => x.RegistrationFee).HasPrecision(18, 2);
         b.Property(x => x.AmountPaid).HasPrecision(18, 2);
+        b.Property(x => x.RegistrationDate).HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
         b.Ignore(x => x.PaymentStatus); // computed, not stored
 
