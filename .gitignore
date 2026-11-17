@@ -1,9 +1,10 @@
+
 # SQLite Database Files
 *.db
 *.db-shm
 *.db-wal
 
-# Build outputs and IDE files (Task Requirement 3A.7)
+# Build outputs and IDE files
 bin/
 obj/
 .vs/
@@ -14,4 +15,8 @@ dist/
 submission-requirements/
 submission_requirements/
 
+# Backend folder (not part of frontend branch)
 backend/
+
+# Screenshots
+docs/screenshots/
