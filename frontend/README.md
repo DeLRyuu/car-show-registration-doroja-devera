@@ -1,7 +1,34 @@
-# Car Show Registration System – Frontend
+﻿# Car Show Registration System - Frontend
 
 React dashboard for the Car Show 2027 registration system.
-Event staff use it to see the numbers (KPI cards) and to browse, search and filter registrations.
+Event staff use it to see the numbers and to find registrations.
+
+## Status
+
+- The dashboard is finished and connected to the C# API.
+- It was tested with the backend running on http://localhost:5205.
+- The sample data is still in the project, and you can switch back to it (see "Real API or sample data").
+
+## What is built
+
+- A strip of 5 numbers at the top: Total registrations, Total payments, Uncollected payments, Confirmed, Checked in. They come from the summary request.
+- A table of registrations with these columns: Reg. no., Date, Participant, Car, Type, Status, Fee / paid, Payment
+- Search by participant name (it waits 400 ms after you stop typing)
+- Filters for registration type and status, and a Clear filters button. The filtering is done by the API.
+- Page buttons (Previous, Next, page numbers), a "Showing x-y of N" line, and a Per page choice (5, 10, 20)
+- Loading rows while the data loads
+- A message when nothing matches the filters, with a Clear filters button
+- A message when the API cannot be reached, with a Try again button
+
+## Design
+
+- Font: Barlow (one font family everywhere)
+- Colors: ink `#16212b`, steel blue `#2b5c8f`, paper `#f1f3f5`, line `#d5dae0`. Payment status uses red (Unpaid), amber (Partial) and green (Paid).
+- Every status shows a word as well as a color, so color is never the only clue.
+- Plate numbers are shown in a small box that looks like a license plate.
+- Dates are shown in the local time of the browser. Amounts are shown in pesos.
+- Pressing the Tab key shows a clear blue outline.
+- On small screens the table scrolls sideways and the numbers wrap into columns.
 
 ## Technologies
 
@@ -11,21 +38,28 @@ Event staff use it to see the numbers (KPI cards) and to browse, search and filt
 
 ## How to run
 
-1. Install Node.js.
-2. Open a terminal in the `frontend/` folder.
-3. Install the packages:
+You need Node.js (version 20 or newer) and the .NET 10 SDK. Open two terminals.
 
-   ```
-   npm install
-   ```
+Terminal 1 - the backend:
 
-4. Start the app:
+```
+cd backend
+dotnet run --project Api
+```
 
-   ```
-   npm run dev
-   ```
+Wait for `Now listening on: http://localhost:5205`.
 
-5. Open http://localhost:5173
+Terminal 2 - the dashboard:
+
+```
+cd frontend
+npm install
+npm run dev -- --port 5173 --strictPort
+```
+
+Open http://localhost:5173
+
+The backend only allows the address http://localhost:5173, so keep `--strictPort`. If the port is busy, Vite stops instead of using another port.
 
 To check for errors before you commit:
 
@@ -33,76 +67,63 @@ To check for errors before you commit:
 npm run build
 ```
 
-## Features
-
-- 5 KPI cards: Total Registrations, Total Payments, Uncollected Payments, Confirmed, Checked In
-- Registrations table with colored status and payment badges
-- Search by participant name (waits 400 ms after typing stops)
-- Filter by type and by status, with a Clear filters button
-- Page buttons, a "Showing x–y of N" summary, and a page-size choice (5, 10, 20)
-- Loading message, empty message, and error message with a Try again button
-
 ## Project structure
 
 ```
 src/
-├── api/          sampleData.ts and registrationsApi.ts
-├── components/   KPI cards, filters, table, badges, pagination
-├── hooks/        useDebounce
-├── pages/        RegistrationsPage (state and data fetching)
-├── types/        TypeScript types that match the API
-└── utils/        money and date formatting
+|-- api/          registrationsApi.ts (real API) and sampleData.ts (sample data)
+|-- components/   KpiCard, KpiCards, RegistrationFilters, RegistrationTable,
+|                 TableSkeleton, Pagination, StatusBadge, PaymentBadge
+|-- hooks/        useDebounce
+|-- pages/        RegistrationsPage (state and data fetching)
+|-- types/        TypeScript types that match the API
++-- utils/        money and date formatting
 ```
 
-## Sample data or real API
+## Real API or sample data
 
-The dashboard can use sample data or the real C# API.
-Both files have the same functions, `getRegistrations()` and `getSummary()`, and they return the same data shapes.
+Both files in `src/api/` have the same functions, `getRegistrations()` and `getSummary()`, and they return the same data shapes.
 
 | File | What it does |
 |---|---|
+| `src/api/registrationsApi.ts` | Real `fetch` calls to the C# API. This is the default. |
 | `src/api/sampleData.ts` | 25 sample registrations. Filtering and paging happen in the browser. |
-| `src/api/registrationsApi.ts` | Real `fetch` calls to the C# API. |
 
-### Use the sample data (default)
+The API address is in `frontend/.env.development`:
 
-In `src/pages/RegistrationsPage.tsx`, the import is:
+```
+VITE_API_BASE_URL=http://localhost:5205
+```
+
+Vite only reads this file when it starts, so stop `npm run dev` with Ctrl + C and start it again after you change it.
+
+### Use the sample data (no backend needed)
+
+In `src/pages/RegistrationsPage.tsx`, change the import to:
 
 ```ts
 import { getRegistrations, getSummary } from "../api/sampleData";
 ```
 
-No backend is needed.
+### Use the real API (default)
 
-### Switch to the real API
+In `src/pages/RegistrationsPage.tsx`, the import is:
 
-1. Start the backend in another terminal:
+```ts
+import { getRegistrations, getSummary } from "../api/registrationsApi";
+```
 
-   ```
-   cd backend
-   dotnet run --project Api
-   ```
-
-2. Copy the URL that the backend prints and put it in `frontend/.env.development`:
-
-   ```
-   VITE_API_BASE_URL=http://localhost:5205
-   ```
-
-3. In `src/pages/RegistrationsPage.tsx`, change the import to:
-
-   ```ts
-   import { getRegistrations, getSummary } from "../api/registrationsApi";
-   ```
-
-4. Stop `npm run dev` with Ctrl + C and start it again. Vite only reads the `.env` file when it starts.
-
-If the page shows "Cannot reach the API", check that the backend is running, that the port in `.env.development` is correct, and that the backend allows CORS for http://localhost:5173.
+If the page shows "Cannot reach the API", check that the backend is running, that the port in `.env.development` is correct, and that the page is open at http://localhost:5173 (not 127.0.0.1).
 
 ## API used
 
 | Request | Used for |
 |---|---|
 | `GET /api/registrations?participantName=&type=&status=&page=1&pageSize=10` | The table, filters and page buttons |
-| `GET /api/registrations/summary` | The KPI cards |
+| `GET /api/registrations/summary` | The 5 numbers at the top |
 
+The 5 numbers come from the summary request. They are not added up from the rows on the page.
+
+## Screenshots
+
+The screenshots for the documentation are in `docs/screenshots/`. The files of the frontend start with `fe-`.
