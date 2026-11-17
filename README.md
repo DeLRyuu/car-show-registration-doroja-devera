@@ -49,6 +49,10 @@ This directory contains the complete verification evidence, endpoint test result
      - [9a. GET Request Headers & Query Parameters](#9a-get-request-headers--query-parameters)
      - [9b. JSON Response Payload](#9b-json-response-payload)
   10. [Screenshot 10 — GitHub Commit History](#screenshot-10--github-commit-history)
+     - [10a. Commit History (Page 1)](#10a-commit-history-page-1)
+     - [10b. Commit History (Page 2)](#10b-commit-history-page-2)
+     - [10c. Commit History (Page 3)](#10c-commit-history-page-3)
+     - [10d. Commit History (Page 4)](#10d-commit-history-page-4)
   11. [Screenshot 11 — Running Full Application (API & React App Integration)](#screenshot-11--running-full-application-api--react-app-integration)
 
 ---
@@ -280,9 +284,19 @@ Shows the raw JSON payload returned by the C# Minimal API endpoint under the Dev
 
 ### Screenshot 10 — GitHub Commit History
 
-Shows the atomic, meaningful Git commit history created by the Frontend Developer throughout development, adhering to the project requirements for clear commit messages.
+Shows the granular, atomic Git commit history created by the Frontend Developer (Andrew DeVera) throughout development, adhering to the project requirements for clear, meaningful commit messages across all feature implementations.
 
-![Screenshot 10 - Git Commit History](./screenshots/frontend-screenshots/fe-10-commit-history.png)
+#### 10a. Commit History (Page 1)
+![Screenshot 10a - Git Commit History](./screenshots/frontend-screenshots/fe-10-commit-history.png)
+
+#### 10b. Commit History (Page 2)
+![Screenshot 10b - Git Commit History](./screenshots/frontend-screenshots/fe-10-commit-history-2.png)
+
+#### 10c. Commit History (Page 3)
+![Screenshot 10c - Git Commit History](./screenshots/frontend-screenshots/fe-10-commit-history-3.png)
+
+#### 10d. Commit History (Page 4)
+![Screenshot 10d - Git Commit History](./screenshots/frontend-screenshots/fe-10-commit-history-4.png)
 
 ---
 
