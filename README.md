@@ -8,8 +8,8 @@ This directory contains the complete verification evidence, endpoint test result
 
 | Member | Role | Responsibilities |
 | :--- | :--- | :--- |
-| **Whindell Doroja** | Backend Developer | .NET 10 Minimal APIs, Vertical Slice Architecture, EF Core SQLite persistence, FluentValidation, Scalar OpenAPI, test scenarios |
-| **Andrew DeVera** | Frontend Developer | React 19, Vite, Tailwind CSS, KPI dashboard cards, registration table, filters, pagination |
+| **Whindell B. Doroja** | Backend Developer | .NET 10 Minimal APIs, Vertical Slice Architecture, EF Core SQLite persistence, FluentValidation, Scalar OpenAPI, test scenarios |
+| **Andrew E. DeVera** | Frontend Developer | React 19, Vite, Tailwind CSS, KPI dashboard cards, registration table, filters, pagination |
 
 ---
 
@@ -35,18 +35,25 @@ This directory contains the complete verification evidence, endpoint test result
   12. [Screenshot 12 — GitHub Commit History](#screenshot-12--github-commit-history)
   13. [Screenshot 13 — Running Full Application (React Dashboard Integration)](#screenshot-13--running-full-application-react-dashboard-integration)
 - [Part 2: Frontend Verification Screenshots (Andrew DeVera)](#part-2-frontend-verification-screenshots-andrew-devera)
-  1. [FE-1: KPI Cards Strip](#fe-1-kpi-cards-strip)
-  2. [FE-2: Registrations Table with Status & Payment Badges](#fe-2-registrations-table-with-status--payment-badges)
-  3. [FE-3: Debounced Participant Name Search](#fe-3-debounced-participant-name-search)
-  4. [FE-4: Filter by Type & Status with Clear Filters Button](#fe-4-filter-by-type--status-with-clear-filters-button)
-  5. [FE-5: Pagination Controls & Page Size Selector](#fe-5-pagination-controls--page-size-selector)
-  6. [FE-6: Loading Skeleton, Empty State & Error Handling](#fe-6-loading-skeleton-empty-state--error-handling)
-  7. [FE-7: Live Backend Integration (Vite + .NET 10 API via CORS)](#fe-7-live-backend-integration-vite--net-10-api-via-cors)
-  8. [FE-8: Responsive UI / Full Dashboard Overview](#fe-8-responsive-ui--full-dashboard-overview)
+  1. [Screenshot 1 — `frontend/src` Folder Structure](#screenshot-1--frontendsrc-folder-structure)
+  2. [Screenshot 2 — Full Dashboard: KPI Cards + Table + Pagination](#screenshot-2--full-dashboard-kpi-cards--table--pagination)
+  3. [Screenshot 3 — Loading State (Skeleton Rows)](#screenshot-3--loading-state-skeleton-rows)
+  4. [Screenshot 4 — Search by Participant Name](#screenshot-4--search-by-participant-name)
+  5. [Screenshot 5 — Filter by Registration Type & Status](#screenshot-5--filter-by-registration-type--status)
+     - [5a. Filter by Registration Type (`?type=Competitor`)](#5a-filter-by-registration-type)
+     - [5b. Filter by Registration Status (`?status=Pending`)](#5b-filter-by-registration-status)
+  6. [Screenshot 6 — Paging — Page 2 with "Showing x–y of N" Summary](#screenshot-6--paging--page-2-with-showing-xy-of-n-summary)
+  7. [Screenshot 7 — Empty State (Filters with No Results)](#screenshot-7--empty-state-filters-with-no-results)
+  8. [Screenshot 8 — Error State (API Stopped)](#screenshot-8--error-state-api-stopped)
+  9. [Screenshot 9 — Browser DevTools Network Tab & JSON Response](#screenshot-9--browser-devtools-network-tab--json-response)
+     - [9a. GET Request Headers & Query Parameters](#9a-get-request-headers--query-parameters)
+     - [9b. JSON Response Payload](#9b-json-response-payload)
+  10. [Screenshot 10 — GitHub Commit History](#screenshot-10--github-commit-history)
+  11. [Screenshot 11 — Running Full Application (API & React App Integration)](#screenshot-11--running-full-application-api--react-app-integration)
 
 ---
 
-# Part 1: Backend Verification Screenshots (Whindell Doroja)
+# Part 1: Backend Verification Screenshots (Whindell B. Doroja)
 
 ### Screenshot 1 — Solution & Folder Structure
 
@@ -173,96 +180,114 @@ Shows the full integrated stack in action: the React 19 + Tailwind CSS frontend 
 
 ---
 
-# Part 2: Frontend Verification Screenshots (Andrew DeVera)
+# Part 2: Frontend Verification Screenshots (Andrew E. DeVera)
 
-> **Note for Andrew:** Place your screenshot images inside [`docs/screenshots/frontend-screenshots/`](./screenshots/frontend-screenshots/) using the suggested filenames below, or update the image links as needed.
+### Screenshot 1 — `frontend/src` Folder Structure
 
----
+Shows the modular directory layout of the React (Vite) application inside `frontend/src/`. Reusable UI components (`KpiCards`, `RegistrationTable`, `RegistrationFilters`, `Pagination`, `TableSkeleton`, `StatusBadge`, `PaymentBadge`) are separated from API service modules (`registrationsApi.ts`, `sampleData.ts`), custom hooks (`useDebounce.ts`), TypeScript contracts (`types/registration.ts`), and formatters (`utils/format.ts`).
 
-### FE-1: KPI Cards Strip
-
-Shows the 5 summary KPI cards rendered at the top of the dashboard:
-- **Total Registrations**
-- **Total Payments** (formatted as Philippine Peso `₱`)
-- **Uncollected Payments**
-- **Confirmed Count**
-- **Checked In Count**
-
-> *Add image: `docs/screenshots/frontend-screenshots/fe-01-kpi-cards.png`*
-
-![FE-1: KPI Cards Strip](./screenshots/frontend-screenshots/fe-01-kpi-cards.png)
+![Screenshot 1 - frontend/src Folder Structure](./screenshots/frontend-screenshots/fe-01-src-structure.png)
 
 ---
 
-### FE-2: Registrations Table with Status & Payment Badges
+### Screenshot 2 — Full Dashboard: KPI Cards + Table + Pagination
 
-Shows the main registrations table displaying participant name, car make & model, plate number, type, date, registration fee, amount paid, and custom styled badges:
-- **Status Badges:** `Pending` (yellow), `Confirmed` (blue), `CheckedIn` (green), `Cancelled` (red)
-- **Payment Badges:** `Unpaid` (red), `Partial` (amber), `Paid` (emerald)
+Shows the full Car Show 2027 Registration Dashboard running against the live .NET 10 API backend on `http://localhost:5205`. At the top, the KPI card strip displays the 5 aggregate metrics (`Total Registrations: 25`, `Total Payments: ₱42,000.00`, `Uncollected Payments: ₱19,500.00`, `Confirmed: 10`, `Checked In: 6`) fetched directly from `GET /api/registrations/summary`. The table renders the first 10 vehicle registrations with formatted dates, participant contacts, custom license plate badges, status pills, and right-aligned Philippine Peso amounts.
 
-> *Add image: `docs/screenshots/frontend-screenshots/fe-02-table-badges.png`*
-
-![FE-2: Registrations Table with Badges](./screenshots/frontend-screenshots/fe-02-table-badges.png)
+![Screenshot 2 - Full Dashboard with Live API Data](./screenshots/frontend-screenshots/fe-02-dashboard-api-data.png)
 
 ---
 
-### FE-3: Debounced Participant Name Search
+### Screenshot 3 — Loading State (Skeleton Rows)
 
-Shows the live participant search input in action, leveraging the `useDebounce` hook (400ms delay) to prevent excessive API requests while typing.
+Shows the dashboard loading state while asynchronous data is being fetched from the backend. Instead of displaying a blank screen or a basic spinner, the dashboard renders the bonus `TableSkeleton` component with grey animated shimmer placeholder rows. Each row replicates the height, column proportions, and badge positions of the real table, eliminating Cumulative Layout Shift (CLS).
 
-> *Add image: `docs/screenshots/frontend-screenshots/fe-03-search-debounce.png`*
-
-![FE-3: Debounced Participant Search](./screenshots/frontend-screenshots/fe-03-search-debounce.png)
+![Screenshot 3 - Loading State](./screenshots/frontend-screenshots/fe-03-loading-state.png)
 
 ---
 
-### FE-4: Filter by Type & Status with Clear Filters Button
+### Screenshot 4 — Search by Participant Name
 
-Shows the dropdown filters for **Registration Type** (`Exhibitor`, `Competitor`, `VIP`) and **Status** (`Pending`, `Confirmed`, `CheckedIn`, `Cancelled`), along with the **Clear filters** button resetting the table view.
+Shows dynamic participant name filtering in action. As the user types into the search box, the custom `useDebounce` hook waits 400ms after the last keystroke before issuing a query to `GET /api/registrations?participantName=...&page=1&pageSize=10`. The C# backend performs a case-insensitive substring match and returns only matching participants. The table updates instantly with the filtered rows, and the active page automatically resets to page 1.
 
-> *Add image: `docs/screenshots/frontend-screenshots/fe-04-filters.png`*
-
-![FE-4: Type and Status Filters](./screenshots/frontend-screenshots/fe-04-filters.png)
+![Screenshot 4 - Search by Participant Name](./screenshots/frontend-screenshots/fe-04-search-name.png)
 
 ---
 
-### FE-5: Pagination Controls & Page Size Selector
+### Screenshot 5 — Filter by Registration Type & Status
 
-Shows the bottom pagination bar with page numbers, Previous/Next navigation buttons, "Showing x–y of N registrations" summary, and the page-size selector dropdown (5, 10, 20 items per page).
+Demonstrates server-side query filtering using the dropdown controls for registration type and status.
 
-> *Add image: `docs/screenshots/frontend-screenshots/fe-05-pagination.png`*
+#### 5a. Filter by Registration Type
+Query: `GET /api/registrations?type=Competitor` (or `?type=VIP`)
 
-![FE-5: Pagination Controls](./screenshots/frontend-screenshots/fe-05-pagination.png)
+Selecting a registration type from the dropdown immediately dispatches a filtered API query. The result displays only participants matching the selected category (e.g. Competitor entries with their ₱2,500.00 registration fee). The pagination counter updates dynamically to reflect the count of records within the filtered subset.
 
----
+![Screenshot 5a - Filter by Registration Type](./screenshots/frontend-screenshots/fe-05a-filter-type.png)
 
-### FE-6: Loading Skeleton, Empty State & Error Handling
+#### 5b. Filter by Registration Status
+Query: `GET /api/registrations?status=Pending` (or `?status=Confirmed`)
 
-Shows the UI state management:
-- **Loading Skeleton (`TableSkeleton.tsx`):** Animated shimmer placeholder rows while data fetches.
-- **Empty State:** Friendly fallback when search or filters return zero matches.
-- **Error State:** Error banner with a "Try again" retry button if the API is unreachable.
+Filtering by workflow status allows event coordinators to quickly isolate entries requiring staff action. Selecting `Pending` sends `GET /api/registrations?status=Pending`, updating the table to display only unconfirmed submissions with distinct yellow status badges. Modifying the filter automatically resets the active page index to 1.
 
-> *Add image: `docs/screenshots/frontend-screenshots/fe-06-states.png`*
-
-![FE-6: UI States - Loading / Empty / Error](./screenshots/frontend-screenshots/fe-06-states.png)
+![Screenshot 5b - Filter by Registration Status](./screenshots/frontend-screenshots/fe-05b-filter-status.png)
 
 ---
 
-### FE-7: Live Backend Integration (Vite + .NET 10 API via CORS)
+### Screenshot 6 — Paging — Page 2 with "Showing x–y of N" Summary
 
-Shows the React frontend configured with `VITE_API_BASE_URL=http://localhost:5205` in `frontend/.env.development` consuming live backend data via `src/api/registrationsApi.ts`, with DevTools Network tab showing successful 200 HTTP calls.
+Shows the pagination controls after advancing to page 2 of the registrations list. The active page button (`2`) is highlighted with the primary steel blue theme (`bg-steel text-white`), and the summary text updates to "Showing 11–20 of 25". Both Previous and Next navigation buttons remain active, while navigation is disabled when the first or last page is reached. The page-size selector allows staff to customize table density between 5, 10, or 20 rows per page.
 
-> *Add image: `docs/screenshots/frontend-screenshots/fe-07-live-api.png`*
-
-![FE-7: Live API Integration](./screenshots/frontend-screenshots/fe-07-live-api.png)
+![Screenshot 6 - Paging Page 2](./screenshots/frontend-screenshots/fe-06-paging-page-2.png)
 
 ---
 
-### FE-8: Responsive UI / Full Dashboard Overview
+### Screenshot 7 — Empty State (Filters with No Results)
 
-Shows the overall dashboard layout and responsiveness, highlighting Tailwind CSS responsive design, typography, and KPI cards across desktop and compact viewports.
+Shows the intuitive empty state rendered when a search term or filter combination yields zero matching registrations (`registrations.length === 0`). Instead of an empty, ambiguous table, the dashboard presents a user-friendly message: "No registrations match your filters. Try a different name, or clear the filters to see everyone." A prominent "Clear filters" button triggers `handleClear()` to reset all search inputs, dropdowns, and pagination back to initial state.
 
-> *Add image: `docs/screenshots/frontend-screenshots/fe-08-full-dashboard.png`*
+![Screenshot 7 - Empty State](./screenshots/frontend-screenshots/fe-07-empty-state.png)
 
-![FE-8: Full Dashboard Overview](./screenshots/frontend-screenshots/fe-08-full-dashboard.png)
+---
+
+### Screenshot 8 — Error State (API Stopped)
+
+Shows graceful error handling when the C# backend API is stopped or cannot be reached. When fetch requests in `src/api/registrationsApi.ts` fail to connect, `RegistrationsPage` catches the exception and sets `error` to true. The view displays a clear alert stating "Cannot reach the API. Check that the backend is running, then try again." alongside a "Try again" retry button.
+
+![Screenshot 8 - Error State](./screenshots/frontend-screenshots/fe-08-error-state.png)
+
+---
+
+### Screenshot 9 — Browser DevTools Network Tab & JSON Response
+
+Demonstrates verification of the browser network traffic and JSON contract compliance between the React dashboard and the .NET 10 API.
+
+#### 9a. GET Request Headers & Query Parameters
+Request: `GET http://localhost:5205/api/registrations?participantName=&type=&status=&page=1&pageSize=10`
+
+Shows the Chrome DevTools Network panel capturing a successful HTTP request returning status `200 OK`. The query string parameters align exactly with the agreed API contract. The response headers verify that Cross-Origin Resource Sharing (CORS) is properly configured on the backend, allowing origin `http://localhost:5173`.
+
+![Screenshot 9a - DevTools Network Request](./screenshots/frontend-screenshots/fe-09a-devtools-request.png)
+
+#### 9b. JSON Response Payload
+Status: `200 OK` (JSON Array & Pagination Metadata)
+
+Shows the raw JSON payload returned by the C# Minimal API endpoint under the DevTools Response preview. The response object contains the full `items` array along with pagination metadata (`page: 1`, `pageSize: 10`, `totalCount: 25`, `totalPages: 3`). Each participant item includes typed properties such as `registrationNumber`, ISO 8601 UTC `registrationDate`, `carMakeModel`, `plateNumber`, `registrationType`, `status`, `registrationFee`, `amountPaid`, and calculated `paymentStatus`.
+
+![Screenshot 9b - DevTools Network Response](./screenshots/frontend-screenshots/fe-09b-devtools-response.png)
+
+---
+
+### Screenshot 10 — GitHub Commit History
+
+Shows the atomic, meaningful Git commit history created by the Frontend Developer throughout development, adhering to the project requirements for clear commit messages.
+
+![Screenshot 10 - Git Commit History](./screenshots/frontend-screenshots/fe-10-commit-history.png)
+
+---
+
+### Screenshot 11 — Running Full Application (API & React App Integration)
+
+Shows both sides of the application running together in a local development environment. The .NET 10 Minimal API backend runs in the terminal on port 5205 (`http://localhost:5205`), while the React Vite development server runs on port 5173 (`http://localhost:5173`). In the browser window, the dashboard actively renders live KPI numbers, registration rows, and pagination controls. This confirms complete end-to-end integration, functional CORS headers, and real-time client-server communication.
+
+![Screenshot 11 - Running Full Application](./screenshots/frontend-screenshots/fe-11-running-app.png)
